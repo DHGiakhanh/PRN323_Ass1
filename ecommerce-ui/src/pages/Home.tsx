@@ -21,14 +21,14 @@ export default function Home() {
     const [search, setSearch] = useState("");
     const [sort, setSort] = useState("");
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(8); // Tăng pageSize mặc định cho giao diện chuyên nghiệp hơn
+    const [pageSize, setPageSize] = useState(8);
 
     useEffect(() => {
-        // API call được giữ nguyên, chỉ lấy dữ liệu
+
         api.get("/Products").then((res) => setProducts(res.data));
     }, []);
 
-    // Filter + Sort (Logic giữ nguyên)
+
     const filteredProducts = products
         .filter((p) => p.name.toLowerCase().includes(search.toLowerCase().trim()))
         .sort((a, b) => {
@@ -38,7 +38,7 @@ export default function Home() {
             return 0;
         });
 
-    // Pagination (Logic giữ nguyên)
+
     const totalPages = Math.ceil(filteredProducts.length / pageSize);
     const paginatedProducts = filteredProducts.slice(
         (page - 1) * pageSize,
@@ -60,7 +60,7 @@ export default function Home() {
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
             <div className="max-w-7xl mx-auto">
-                {/* Search & Filter */}
+                
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -105,9 +105,9 @@ export default function Home() {
                                 transition={{ duration: 0.5 }}
                                 whileHover={{
                                     scale: 1.03,
-                                    boxShadow: "0 20px 25px -5px rgba(236, 72, 153, 0.1), 0 10px 10px -5px rgba(236, 72, 153, 0.04)" // Shadow màu hồng nhẹ
+                                    boxShadow: "0 20px 25px -5px rgba(236, 72, 153, 0.1), 0 10px 10px -5px rgba(236, 72, 153, 0.04)"
                                 }}
-                                className="bg-white rounded-2xl shadow-xl transition-all duration-300 overflow-hidden flex flex-col" // Bo góc lớn hơn, đổ bóng sâu hơn
+                                className="bg-white rounded-2xl shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
                             >
                                 {p.image && (
                                     <div className="w-full h-48 bg-pink-50 rounded-t-2xl flex items-center justify-center p-2">
@@ -156,7 +156,7 @@ export default function Home() {
                     </div>
                 )}
 
-                {/* Pagination */}
+                
                 {totalPages > 1 && (
                     <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 p-4 bg-white rounded-xl shadow-lg">
                         {/* chọn số sản phẩm/trang */}
