@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Swagger
+// Swagger (Development Tools)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -14,10 +14,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Cấu hình CORS: Cho phép truy cập từ MỌI NGUỒN (AllowAnyOrigin)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy => policy.WithOrigins("https://asmprn232.vercel.app") 
+    options.AddPolicy("AllowAllOrigins",
+        policy => policy.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod());
 });
@@ -33,8 +34,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// ✅ Bật CORS (cho phép tất cả)
-app.UseCors("AllowFrontend");
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
 
