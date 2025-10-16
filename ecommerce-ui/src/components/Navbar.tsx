@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
+  const auth = useAuth();
   return (
     <motion.nav
       initial={{ y: -50, opacity: 0 }}
@@ -17,7 +19,7 @@ export default function Navbar() {
         </span>
       </Link>
       
-      {/* Các nút điều hướng */}
+  {/* Các nút điều hướng */}
       <div className="flex space-x-6 items-center">
         <Link 
           to="/" 
@@ -25,13 +27,39 @@ export default function Navbar() {
         >
           Trang Chủ
         </Link>
-        <Link 
-          to="/create" 
-          className="bg-pink-50 text-pink-600 py-2 px-4 rounded-full font-bold shadow-md hover:bg-white hover:text-pink-700 transition duration-300 transform hover:scale-105"
-        >
-          ✨ Thêm Sản Phẩm
-        </Link>
+        {auth.user?.role === 'Admin' && (
+          <Link 
+            to="/create" 
+            className="bg-pink-50 text-pink-600 py-2 px-4 rounded-full font-bold shadow-md hover:bg-white hover:text-pink-700 transition duration-300 transform hover:scale-105"
+          >
+            ✨ Thêm Sản Phẩm
+          </Link>
+        )}
+        <Link to="/cart" className="text-white">Cart</Link>
+        <AuthLinks />
+        {auth.user && (
+          <div className="text-white text-sm">{auth.user.email}</div>
+        )}
       </div>
     </motion.nav>
+  );
+}
+
+function AuthLinks(){
+  const auth = useAuth();
+  const nav = useNavigate();
+
+  if (!auth.user) return (
+    <div className="flex gap-3">
+      <Link to="/login" className="text-white">Login</Link>
+      <Link to="/register" className="text-white">Register</Link>
+    </div>
+  );
+
+  return (
+    <div className="flex gap-3 items-center">
+      <Link to="/orders" className="text-white">Orders</Link>
+      <button onClick={() => { auth.logout(); nav('/'); }} className="bg-white text-pink-600 px-3 py-1 rounded">Logout</button>
+    </div>
   );
 }

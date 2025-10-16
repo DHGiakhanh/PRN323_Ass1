@@ -4,6 +4,11 @@ import Home from "./pages/Home";
 import CreateProduct from "./pages/CreateProduct";
 import EditProduct from "./pages/EditProduct";
 import ProductDetail from "./pages/ProductDetail";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -16,6 +21,11 @@ function App() {
         <Route path="/create" element={<CreateProduct />} />
         <Route path="/edit/:id" element={<EditProduct />} />
         <Route path="/detail/:id" element={<ProductDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
       </Routes>
     </BrowserRouter>
   );

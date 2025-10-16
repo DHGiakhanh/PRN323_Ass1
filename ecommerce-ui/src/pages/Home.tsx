@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 
@@ -17,6 +18,7 @@ const HOVER_COLOR_CLASS = `hover:bg-${THEME_COLOR}-600`;
 const PRIMARY_COLOR_CLASS = `bg-${THEME_COLOR}-500`;
 
 export default function Home() {
+    const auth = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
     const [search, setSearch] = useState("");
     const [sort, setSort] = useState("");
@@ -137,18 +139,22 @@ export default function Home() {
                                         >
                                             👁 Chi tiết
                                         </Link>
-                                        <Link
-                                            to={`/edit/${p.id}`}
-                                            className="flex-1 text-center px-4 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
-                                        >
-                                            ✏ Sửa
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(p.id)}
-                                            className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
-                                        >
-                                            🗑 Xóa
-                                        </button>
+                                        {auth.user?.role === 'Admin' && (
+                                            <>
+                                                <Link
+                                                    to={`/edit/${p.id}`}
+                                                    className="flex-1 text-center px-4 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
+                                                >
+                                                    ✏ Sửa
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleDelete(p.id)}
+                                                    className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
+                                                >
+                                                    🗑 Xóa
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </motion.div>

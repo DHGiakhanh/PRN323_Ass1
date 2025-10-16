@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../api";
 import { motion } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 interface Product {
   id: number;
@@ -17,6 +19,7 @@ const BUTTON_PINK_CLASS = "bg-pink-500 hover:bg-pink-600";
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
+  const auth = useAuth();
 
   useEffect(() => {
     api.get(`/Products/${id}`).then((res) => setProduct(res.data));
@@ -82,12 +85,30 @@ export default function ProductDetail() {
 
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mt-6">
-              <Link
-                to={`/edit/${product.id}`}
-                className={`flex-1 text-center px-6 py-3 bg-yellow-500 text-white rounded-xl font-bold hover:bg-yellow-600 transition shadow-md hover:shadow-lg`}
+              <button
+                onClick={() => {
+                  // add to cart
+                  const raw = localStorage.getItem('cart');
+                  const cart = raw ? JSON.parse(raw) : [];
+                  const existing = cart.find((c: any) => c.productId === product.id);
+                  if (existing) existing.quantity += 1; else cart.push({ productId: product.id, name: product.name, price: product.price, quantity: 1 });
+                  localStorage.setItem('cart', JSON.stringify(cart));
+                  toast.success('Đã thêm vào giỏ');
+                }}
+                className={`flex-1 text-center px-6 py-3 ${BUTTON_PINK_CLASS} text-white rounded-xl font-bold transition shadow-md hover:shadow-lg`}
               >
-                ✏ Sửa Sản Phẩm
-              </Link>
+                🛒 Thêm vào giỏ
+              </button>
+
+              {auth.user?.role === 'Admin' ? (
+                <Link
+                  to={`/edit/${product.id}`}
+                  className={`flex-1 text-center px-6 py-3 bg-yellow-500 text-white rounded-xl font-bold hover:bg-yellow-600 transition shadow-md hover:shadow-lg`}
+                >
+                  ✏ Sửa Sản Phẩm
+                </Link>
+              ) : null}
+
               <Link
                 to="/"
                 className={`flex-1 text-center px-6 py-3 ${BUTTON_PINK_CLASS} text-white rounded-xl font-bold transition shadow-md hover:shadow-lg`}

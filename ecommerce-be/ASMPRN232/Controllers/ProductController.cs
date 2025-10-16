@@ -38,9 +38,10 @@ namespace ASMPRN232.Controllers
             return product;
         }
 
-        // POST: api/products
-        [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
+    // POST: api/products
+    [HttpPost]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
             // Validate cơ bản
             if (string.IsNullOrWhiteSpace(product.Name) ||
@@ -57,9 +58,10 @@ namespace ASMPRN232.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
-        // PUT: api/products/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, Product product)
+    // PUT: api/products/5
+    [HttpPut("{id}")]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
             if (id != product.Id)
             {
@@ -84,9 +86,10 @@ namespace ASMPRN232.Controllers
             return Ok(existing);
         }
 
-        // DELETE: api/products/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+    // DELETE: api/products/5
+    [HttpDelete("{id}")]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
